@@ -7,16 +7,16 @@
 
 */
 
-const $ = new Env("中青看点")
+const $ = new Env("中青看点");
 
 const notify = $.isNode() ? require('./sendNotify') : '';
 //const youthNode = $.isNode() ? require('./youth_env') : '';
 
 // 可设置部分
-let notifyInterval = $.getdata("notifytimes") || 50 //通知间隔，默认抽奖每50次通知一次，如需关闭全部通知请设为0
-let ONCard = $.getdata('zqcard') || "false" //早起打卡开关
-let s = $.getdata('delay_rotary_zq') || "10" //转盘延迟时间
-let withdrawcash = $.getdata('zqcash') || 30 //提现金额
+let notifyInterval = $.getdata("notifytimes") || 50; //通知间隔，默认抽奖每50次通知一次，如需关闭全部通知请设为0
+let ONCard = $.getdata('zqcard') || "false"; //早起打卡开关
+let s = $.getdata('delay_rotary_zq') || "10"; //转盘延迟时间
+let withdrawcash = $.getdata('zqcash') || 30; //提现金额
 let cardTime = $.getdata('zqtime') || "05"; //打卡时间
 
 // 需获取部分
@@ -27,14 +27,10 @@ let artBody = $.getdata('read_zq');
 let readTimes = $.getdata('readtime_zq');
 
 //声明部分
-let rotaryscore = 0,
-    doublerotary = 0;
-let cookieArr = [],
-    cookie = '',
-    readArr = [],
-    articbody = '',
-    timeArr = [],
-    timebody = '';
+let rotaryscore = 0,doublerotary = 0;
+let cookieArr = [],cookie = '';
+let readArr = [],articbody = '';
+let timeArr = [],timebody = '';
 
 // 脚本部分
 if (isGetCookie = typeof $request !== 'undefined') {
@@ -45,8 +41,8 @@ if (isGetCookie = typeof $request !== 'undefined') {
 } else {
     !(async() => {
         if (!$.isNode() && cookieYouth.indexOf("#") == -1) {
-            cookieArr.push(cookieYouth);
-            readArr.push(artBody);
+            cookieArr.push(cookieYouth),
+            readArr.push(artBody),
             timeArr.push(readTimes)
         } else {
             if (!$.isNode() && cookieYouth.indexOf("#") > -1) {
@@ -55,23 +51,23 @@ if (isGetCookie = typeof $request !== 'undefined') {
                     readTimes = readTimes.split("&")
             } else if ($.isNode()) {
                 if (process.env.YOUTH_HEADER && process.env.YOUTH_HEADER.indexOf('#') > -1) {
-                    cookieYouth = process.env.YOUTH_HEADER.split('#');
+                    cookieYouth = process.env.YOUTH_HEADER.split('#')
                 } else if (process.env.YOUTH_HEADER && process.env.YOUTH_HEADER.indexOf('\n') > -1) {
-                    cookieYouth = process.env.YOUTH_HEADER.split('\n');
+                    cookieYouth = process.env.YOUTH_HEADER.split('\n')
                 } else {
                     cookieYouth = [process.env.YOUTH_HEADER]
                 };
                 if (process.env.YOUTH_ARTBODY && process.env.YOUTH_ARTBODY.indexOf('&') > -1) {
-                    artBody = process.env.YOUTH_ARTBODY.split('&');
+                    artBody = process.env.YOUTH_ARTBODY.split('&')
                 } else if (process.env.YOUTH_ARTBODY && process.env.YOUTH_ARTBODY.indexOf('\n') > -1) {
-                    artBody = process.env.YOUTH_ARTBODY.split('\n');
+                    artBody = process.env.YOUTH_ARTBODY.split('\n')
                 } else {
                     artBody = [process.env.YOUTH_ARTBODY]
                 };
                 if (process.env.YOUTH_TIME && process.env.YOUTH_TIME.indexOf('&') > -1) {
-                    readTimes = process.env.YOUTH_TIME.split('&');
+                    readTimes = process.env.YOUTH_TIME.split('&')
                 } else if (process.env.YOUTH_TIME && process.env.YOUTH_TIME.indexOf('\n') > -1) {
-                    readTimes = process.env.YOUTH_TIME.split('\n');
+                    readTimes = process.env.YOUTH_TIME.split('\n')
                 } else {
                     readTimes = [process.env.YOUTH_TIME]
                 }
@@ -94,24 +90,19 @@ if (isGetCookie = typeof $request !== 'undefined') {
         };
         timeZone = new Date().getTimezoneOffset() / 60;
         timestamp = Date.now() + (8 + timeZone) * 60 * 60 * 1000;
-        bjTime = new Date(timestamp).toLocaleString('zh', {
-            hour12: false,
-            timeZoneName: 'long'
-        });
+        bjTime = new Date(timestamp).toLocaleString('zh', {hour12: false, timeZoneName: 'long'});
         $.log(`\n === 脚本执行${bjTime} === \n`);
         $.log(` =========== 您共提供${cookieArr.length}个中青账号 ==========`);
         if (!cookieArr[0]) {
-            $.msg($.name, '【提示】请先获取中青看点一cookie', "", {
-                'open-url': "https://kandian.youth.cn/u/mhkjN"
-            });
+            $.msg($.name, '【提示】请先获取中青看点一cookie', "", {'open-url': "https://kandian.youth.cn/u/mhkjN"});
             return;
         }
         for (let i = 0; i < cookieArr.length; i++) {
             if (cookieArr[i]) {
-                cookie = cookieArr[i];
-                articbody = readArr[i];
-                timebody = timeArr[i];
-                $.index = i + 1;
+                cookie = cookieArr[i],
+                articbody = readArr[i],
+                timebody = timeArr[i],
+                $.index = i + 1
             };
             myuid = cookie.match(/uid=\d+/);
             await userInfo();
@@ -169,8 +160,8 @@ function userInfo() {
         $.post(kdHost('WebApi/NewTaskIos/getSign'), async(error, resp, data) => {
             signinfo = JSON.parse(data);
             if (signinfo.status == 1) {
-                cash = signinfo.data.user.money;
-                signday = signinfo.data.sign_day;
+                cash = signinfo.data.user.money,
+                signday = signinfo.data.sign_day,
                 totalscore = signinfo.data.user.score;
                 $.sub = `【收益总计】${totalscore}青豆 现金约${cash}元`;
                 nick = '账号:' + signinfo.data.user.nickname;
@@ -178,7 +169,7 @@ function userInfo() {
                     $.setdata(nick, "zq_nick")
                 } else {
                     $.setdata("账号" + cookieArr.length + "合一", "zq_nick")
-                }
+                };
                 if (parseInt(cash) >= withdrawcash && !withdrawBody == false) {
                     await withDraw()
                 };
@@ -209,13 +200,13 @@ function TaskCenter() {
                     await friendsign();
                     for (dailys of taskres.list.daily) {
                         button = dailys.but,
-                            title = dailys.title,
-                            dayid = dailys.id,
-                            reward_act = dailys.reward_action;
+                        title = dailys.title,
+                        dayid = dailys.id,
+                        reward_act = dailys.reward_action;
                         await $.wait(500);
-                        $.log("去" + title)
+                        $.log("去" + title);
                         if (dailys.status == "2") {
-                            $.log(title + "，" + button + "，已领取青豆" + dailys.score)
+                            $.log(title + "，" + button + "，已领取青豆" + dailys.score);
                             $.desc += `【${title}】✅  ${dailys.score}青豆\n`
                         } else if (dailys.status == "1" && dailys.action != "") {
                             $.log(dailys.title + "已完成 ，去领取奖励青豆");
@@ -226,6 +217,8 @@ function TaskCenter() {
                                 await CardStatus()
                             } else if (dayid == "7") {
                                 await readTime()
+                            } else if (title == "元宵额外赚") {
+                                await Census()
                             } else if (dayid == "10") {
                                 $.log(title + "未完成，去做任务");
                                 for (x = 0; x < 5; x++) {
@@ -270,7 +263,7 @@ function getsign() {
                 return;
             } else if (signres.status == 1) {
                 $.desc = `【签到结果】成功 🎉 青豆: +${signres.score}，明日青豆: +${signres.nextScore}\n`;
-                await comApp();
+                await comApp()
             }
             resolve()
         })
@@ -319,11 +312,12 @@ function withDraw() {
                 'User-Agent': 'KDApp/2.0.0 (iPhone; iOS 14.5; Scale/3.00)'
             },
             body: withdrawBody,
-        }
+        };
         $.post(url, (error, resp, data) => {
             withDrawres = JSON.parse(data)
             if (withDrawres.error_code == 0) {
                 $.desc += `【自动提现】提现${withdrawcash}元成功\n`
+                $.msg($.name,$.sub,$.desc)
             } else if (withDrawres.error_code == "10002") {
                 $.log(`自动提现失败，${withDrawres.homeTime.text}`)
             } else {
@@ -348,7 +342,7 @@ function CardStatus() {
                     $.log("打卡时间已到，去打卡");
                     await endCard()
                 } else if (punchcard.data.user.status == 0) {
-                    $.log("今日您未报名早起打卡，报名时间统一设置成晚上23点");
+                    $.log("今日您未报名早起打卡，报名时间统一设置成晚上23点")
                 }
             } else if (punchcard.code == 0) {
                 $.log("打卡申请失败" + data)
@@ -383,7 +377,7 @@ function endCard() {
                     $.desc += `【早起打卡】${punchcardend.data.card_time}${punchcardend.msg}✅ `;
                     $.log("早起打卡成功，打卡时间:" + `${punchcardend.data.card_time}`);
                     await $.wait(1000);
-                    await Cardshare();
+                    await Cardshare()
                 } else if (punchcardend.code == 0) {
                     // TODO .不在打卡时间范围内
                     $.desc += `【早起打卡】${punchcardend.msg}\n`;
@@ -400,7 +394,7 @@ function Cardshare() {
         $.post(kdHost('WebApi/PunchCard/shareStart?'), async(error, resp, data) => {
             sharestart = JSON.parse(data);
             if (sharestart.code == 1) {
-                $.log("等待2s，去打卡分享")
+                $.log("等待2s，去打卡分享");
                 await $.wait(2000);
                 $.post(kdHost('WebApi/PunchCard/shareEnd?'), (error, response, data) => {
                     shareres = JSON.parse(data);
@@ -433,7 +427,13 @@ function SevCont() {
         })
     })
 }
-
+function Census() {
+    return new Promise((resolve, reject) =>{
+    $.post(kdHost('u/Uuz73'),async(error, resp, data) =>{
+            resolve()
+        })
+    })
+}
 function int() {
         return new Promise((resolve, reject) => {
             let url = {
@@ -566,7 +566,7 @@ function gameVideo() {
 function comApp() {
     return new Promise((resolve, reject) => {
         $.post(batHost('mission/msgRed.json', articbody), (error, resp, data) => {
-            comres = JSON.parse(data)
+            comres = JSON.parse(data);
             if (comres.success == true) {
                 $.desc += `【回访奖励】+${comres.items.score}个青豆\n`
             }
@@ -620,12 +620,12 @@ function bonusTask() {
         $.post(kdHost('WebApi/ShareNew/bereadExtraList'), async(error, resp, data) => {
             extrares = JSON.parse(data);
             if (extrares.status == 2) {
-                $.log("参数错误" + JSON.stringify(extrares));
+                $.log("参数错误" + JSON.stringify(extrares))
             } else if (extrares.status == 1 && extrares.data.taskList[0].status == 1) {
                 timestatus = extrares.data.taskList[0].status;
                 timetitle = extrares.data.taskList[0].name;
                 $.log(timetitle + "可领取，去领青豆");
-                await TimePacket();
+                await TimePacket()
             }
             resolve()
         })
@@ -660,17 +660,17 @@ function rotary() {
                     $.log("等待" + s + "秒进行开始转盘任务");
                     rotaryscore += rotaryres.data.score;
                     rotarytimes = rotaryres.data.remainTurn;
-                    doubleTimes = rotaryres.data.doubleNum
+                    doubleTimes = rotaryres.data.doubleNum;
                     $.log("进行" + parseInt(100 - rotarytimes) + "次转盘，获得" + rotaryres.data.score + "青豆");
                     if (rotaryres.data.score != 0 && doubleTimes != 0) {
                         $.log("等待10s，获得双倍青豆")
                         await $.wait(10000);
-                        await TurnDouble();
+                        await TurnDouble()
                     }
-                    await rotaryCheck();
+                    await rotaryCheck()
                 }
             } catch (e) {
-                $.logErr(e, resp);
+                $.logErr(e, resp)
             } finally {
                 resolve()
             }
@@ -699,10 +699,10 @@ function runRotary(index) {
         $.post(kdHost(`WebApi/RotaryTable/chestReward?_=${Date.now()}&`, rotarbody), (error, resp, data) => {
             let rotaryresp = JSON.parse(data);
             if (rotaryresp.status == 1) {
-                $.desc += `【转盘宝箱${index}】+${rotaryresp.data.score}个青豆\n`;
+                $.desc += `【转盘宝箱${index}】+${rotaryresp.data.score}个青豆\n`
             } else {
                 if (rotaryresp.code == "10010") {
-                    $.desc += `【转盘宝箱${index}】+今日抽奖完成\n`;
+                    $.desc += `【转盘宝箱${index}】+今日抽奖完成\n`
                 }
             }
             resolve();
@@ -721,7 +721,7 @@ function TurnDouble() {
                     doublerotary += Doubleres.data.score
                 }
             } catch (e) {
-                $.logErr(e, resp);
+                $.logErr(e, resp)
             } finally {
                 resolve()
             }
@@ -760,4 +760,4 @@ async function showmsg() {
 
 function GetCookie(){if($request&&$request.method!=`OPTIONS`&&$request.url.match(/\/NewTaskIos\/getTaskList/)){RefererVal=$request.headers.Referer;signheaderVal=RefererVal.match(/&uid=\d+/)+RefererVal.match(/&cookie=[_a-zA-Z0-9-]+/)+RefererVal.match(/&cookie_id=[a-zA-Z0-9]+/);if(signheaderVal)$.setdata(signheaderVal,'youthheader_zq');$.log(`${$.name}获取Cookie: 成功, signheaderVal: $}`);$.msg($.name,`获取Cookie: 成功🎉`,``)}else if($request&&$request.method!=`OPTIONS`&&$request.url.match(/\/article\/info\/get/)){articlebodyVal=$request.url.split("?")[1];if(articlebodyVal)$.setdata(articlebodyVal,'read_zq');$.log(`${$.name}获取阅读: 成功, articbody: ${articlebodyVal}`);$.msg($.name,`获取阅读请求: 成功🎉`,``)}else if($request&&$request.method!=`OPTIONS`&&$request.url.match(/\/v5\/user\/stay/)){const timebodyVal=$request.body;if(timebodyVal)$.setdata(timebodyVal,'readtime_zq');$.log(`${$.name}获取阅读时长: 成功, timebodyVal: ${timebodyVal}`);$.msg($.name,`获取阅读时长: 成功🎉`,``)}else if($request&&$request.method!=`OPTIONS`&&$request.url.match(/\/withdraw\d?\.json/)){const withdrawVal=$request.body;const withdrawUrl=$request.url;if(withdrawVal)$.setdata(withdrawVal,'cashbody_zq');if(withdrawUrl)$.setdata(withdrawUrl,'cashurl_zq');$.log(`${$.name}, 获取提现请求: 成功, withdrawUrl: ${withdrawUrl}`);$.log(`${$.name}, 获取提现请求: 成功, withdrawBody: ${withdrawVal}`);$.msg($.name,`获取提现请求: 成功🎉`,``)}}
 
-function Env(t,e){class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==typeof t?{url:t}:t;let s=this.get;return"POST"===e&&(s=this.post),new Promise((e,i)=>{s.call(this,t,(t,s,r)=>{t?i(t):e(s)})})}get(t){return this.send.call(this.env,t)}post(t){return this.send.call(this.env,t,"POST")}}return new class{constructor(t,e){this.name=t,this.http=new s(this),this.data=null,this.dataFile="box.dat",this.logs=[],this.isMute=!1,this.isNeedRewrite=!1,this.logSeparator="\n",this.startTime=(new Date).getTime(),Object.assign(this,e),this.log("",`\ud83d\udd14${this.name}, \u5f00\u59cb!`)}isNode(){return"undefined"!=typeof module&&!!module.exports}isQuanX(){return"undefined"!=typeof $task}isSurge(){return"undefined"!=typeof $httpClient&&"undefined"==typeof $loon}isLoon(){return"undefined"!=typeof $loon}toObj(t,e=null){try{return JSON.parse(t)}catch{return e}}toStr(t,e=null){try{return JSON.stringify(t)}catch{return e}}getjson(t,e){let s=e;const i=this.getdata(t);if(i)try{s=JSON.parse(this.getdata(t))}catch{}return s}setjson(t,e){try{return this.setdata(JSON.stringify(t),e)}catch{return!1}}getScript(t){return new Promise(e=>{this.get({url:t},(t,s,i)=>e(i))})}runScript(t,e){return new Promise(s=>{let i=this.getdata("@chavy_boxjs_userCfgs.httpapi");i=i?i.replace(/\n/g,"").trim():i;let r=this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");r=r?1*r:20,r=e&&e.timeout?e.timeout:r;const[o,h]=i.split("@"),a={url:`http://${h}/v1/scripting/evaluate`,body:{script_text:t,mock_type:"cron",timeout:r},headers:{"X-Key":o,Accept:"*/*"}};this.post(a,(t,e,i)=>s(i))}).catch(t=>this.logErr(t))}loaddata(){if(!this.isNode())return{};{this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e);if(!s&&!i)return{};{const i=s?t:e;try{return JSON.parse(this.fs.readFileSync(i))}catch(t){return{}}}}}writedata(){if(this.isNode()){this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e),r=JSON.stringify(this.data);s?this.fs.writeFileSync(t,r):i?this.fs.writeFileSync(e,r):this.fs.writeFileSync(t,r)}}lodash_get(t,e,s){const i=e.replace(/\[(\d+)\]/g,".$1").split(".");let r=t;for(const t of i)if(r=Object(r)[t],void 0===r)return s;return r}lodash_set(t,e,s){return Object(t)!==t?t:(Array.isArray(e)||(e=e.toString().match(/[^.[\]]+/g)||[]),e.slice(0,-1).reduce((t,s,i)=>Object(t[s])===t[s]?t[s]:t[s]=Math.abs(e[i+1])>>0==+e[i+1]?[]:{},t)[e[e.length-1]]=s,t)}getdata(t){let e=this.getval(t);if(/^@/.test(t)){const[,s,i]=/^@(.*?)\.(.*?)$/.exec(t),r=s?this.getval(s):"";if(r)try{const t=JSON.parse(r);e=t?this.lodash_get(t,i,""):e}catch(t){e=""}}return e}setdata(t,e){let s=!1;if(/^@/.test(e)){const[,i,r]=/^@(.*?)\.(.*?)$/.exec(e),o=this.getval(i),h=i?"null"===o?null:o||"{}":"{}";try{const e=JSON.parse(h);this.lodash_set(e,r,t),s=this.setval(JSON.stringify(e),i)}catch(e){const o={};this.lodash_set(o,r,t),s=this.setval(JSON.stringify(o),i)}}else s=this.setval(t,e);return s}getval(t){return this.isSurge()||this.isLoon()?$persistentStore.read(t):this.isQuanX()?$prefs.valueForKey(t):this.isNode()?(this.data=this.loaddata(),this.data[t]):this.data&&this.data[t]||null}setval(t,e){return this.isSurge()||this.isLoon()?$persistentStore.write(t,e):this.isQuanX()?$prefs.setValueForKey(t,e):this.isNode()?(this.data=this.loaddata(),this.data[e]=t,this.writedata(),!0):this.data&&this.data[e]||null}initGotEnv(t){this.got=this.got?this.got:require("got"),this.cktough=this.cktough?this.cktough:require("tough-cookie"),this.ckjar=this.ckjar?this.ckjar:new this.cktough.CookieJar,t&&(t.headers=t.headers?t.headers:{},void 0===t.headers.Cookie&&void 0===t.cookieJar&&(t.cookieJar=this.ckjar))}get(t,e=(()=>{})){t.headers&&(delete t.headers["Content-Type"],delete t.headers["Content-Length"]),this.isSurge()||this.isLoon()?(this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.get(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)})):this.isQuanX()?(this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t))):this.isNode()&&(this.initGotEnv(t),this.got(t).on("redirect",(t,e)=>{try{if(t.headers["set-cookie"]){const s=t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();this.ckjar.setCookieSync(s,null),e.cookieJar=this.ckjar}}catch(t){this.logErr(t)}}).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)}))}post(t,e=(()=>{})){if(t.body&&t.headers&&!t.headers["Content-Type"]&&(t.headers["Content-Type"]="application/x-www-form-urlencoded"),t.headers&&delete t.headers["Content-Length"],this.isSurge()||this.isLoon())this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.post(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)});else if(this.isQuanX())t.method="POST",this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t));else if(this.isNode()){this.initGotEnv(t);const{url:s,...i}=t;this.got.post(s,i).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)})}}time(t){let e={"M+":(new Date).getMonth()+1,"d+":(new Date).getDate(),"H+":(new Date).getHours(),"m+":(new Date).getMinutes(),"s+":(new Date).getSeconds(),"q+":Math.floor(((new Date).getMonth()+3)/3),S:(new Date).getMilliseconds()};/(y+)/.test(t)&&(t=t.replace(RegExp.$1,((new Date).getFullYear()+"").substr(4-RegExp.$1.length)));for(let s in e)new RegExp("("+s+")").test(t)&&(t=t.replace(RegExp.$1,1==RegExp.$1.length?e[s]:("00"+e[s]).substr((""+e[s]).length)));return t}msg(e=t,s="",i="",r){const o=t=>{if(!t)return t;if("string"==typeof t)return this.isLoon()?t:this.isQuanX()?{"open-url":t}:this.isSurge()?{url:t}:void 0;if("object"==typeof t){if(this.isLoon()){let e=t.openUrl||t.url||t["open-url"],s=t.mediaUrl||t["media-url"];return{openUrl:e,mediaUrl:s}}if(this.isQuanX()){let e=t["open-url"]||t.url||t.openUrl,s=t["media-url"]||t.mediaUrl;return{"open-url":e,"media-url":s}}if(this.isSurge()){let e=t.url||t.openUrl||t["open-url"];return{url:e}}}};this.isMute||(this.isSurge()||this.isLoon()?$notification.post(e,s,i,o(r)):this.isQuanX()&&$notify(e,s,i,o(r)));let h=["","==============\ud83d\udce3\u7cfb\u7edf\u901a\u77e5\ud83d\udce3=============="];h.push(e),s&&h.push(s),i&&h.push(i),console.log(h.join("\n")),this.logs=this.logs.concat(h)}log(...t){t.length>0&&(this.logs=[...this.logs,...t]),console.log(t.join(this.logSeparator))}logErr(t,e){const s=!this.isSurge()&&!this.isQuanX()&&!this.isLoon();s?this.log("",`\u2757\ufe0f${this.name}, \u9519\u8bef!`,t.stack):this.log("",`\u2757\ufe0f${this.name}, \u9519\u8bef!`,t)}wait(t){return new Promise(e=>setTimeout(e,t))}done(t={}){const e=(new Date).getTime(),s=(e-this.startTime)/1e3;this.log("",`\ud83d\udd14${this.name}, \u7ed3\u675f! \ud83d\udd5b ${s} \u79d2`),this.log(),(this.isSurge()||this.isQuanX()||this.isLoon())&&$done(t)}}(t,e)}
+function Env(t,e){"undefined"!=typeof process&&JSON.stringify(process.env).indexOf("GITHUB")>-1&&process.exit(0);class s{constructor(t){this.env=t}send(t,e="GET"){t="string"==typeof t?{url:t}:t;let s=this.get;return"POST"===e&&(s=this.post),new Promise((e,i)=>{s.call(this,t,(t,s,r)=>{t?i(t):e(s)})})}get(t){return this.send.call(this.env,t)}post(t){return this.send.call(this.env,t,"POST")}}return new class{constructor(t,e){this.name=t,this.http=new s(this),this.data=null,this.dataFile="box.dat",this.logs=[],this.isMute=!1,this.isNeedRewrite=!1,this.logSeparator="\n",this.startTime=(new Date).getTime(),Object.assign(this,e),this.log("",`\ud83d\udd14${this.name}, \u5f00\u59cb!`)}isNode(){return"undefined"!=typeof module&&!!module.exports}isQuanX(){return"undefined"!=typeof $task}isSurge(){return"undefined"!=typeof $httpClient&&"undefined"==typeof $loon}isLoon(){return"undefined"!=typeof $loon}toObj(t,e=null){try{return JSON.parse(t)}catch{return e}}toStr(t,e=null){try{return JSON.stringify(t)}catch{return e}}getjson(t,e){let s=e;const i=this.getdata(t);if(i)try{s=JSON.parse(this.getdata(t))}catch{}return s}setjson(t,e){try{return this.setdata(JSON.stringify(t),e)}catch{return!1}}getScript(t){return new Promise(e=>{this.get({url:t},(t,s,i)=>e(i))})}runScript(t,e){return new Promise(s=>{let i=this.getdata("@chavy_boxjs_userCfgs.httpapi");i=i?i.replace(/\n/g,"").trim():i;let r=this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");r=r?1*r:20,r=e&&e.timeout?e.timeout:r;const[o,h]=i.split("@"),a={url:`http://${h}/v1/scripting/evaluate`,body:{script_text:t,mock_type:"cron",timeout:r},headers:{"X-Key":o,Accept:"*/*"}};this.post(a,(t,e,i)=>s(i))}).catch(t=>this.logErr(t))}loaddata(){if(!this.isNode())return{};{this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e);if(!s&&!i)return{};{const i=s?t:e;try{return JSON.parse(this.fs.readFileSync(i))}catch(t){return{}}}}}writedata(){if(this.isNode()){this.fs=this.fs?this.fs:require("fs"),this.path=this.path?this.path:require("path");const t=this.path.resolve(this.dataFile),e=this.path.resolve(process.cwd(),this.dataFile),s=this.fs.existsSync(t),i=!s&&this.fs.existsSync(e),r=JSON.stringify(this.data);s?this.fs.writeFileSync(t,r):i?this.fs.writeFileSync(e,r):this.fs.writeFileSync(t,r)}}lodash_get(t,e,s){const i=e.replace(/\[(\d+)\]/g,".$1").split(".");let r=t;for(const t of i)if(r=Object(r)[t],void 0===r)return s;return r}lodash_set(t,e,s){return Object(t)!==t?t:(Array.isArray(e)||(e=e.toString().match(/[^.[\]]+/g)||[]),e.slice(0,-1).reduce((t,s,i)=>Object(t[s])===t[s]?t[s]:t[s]=Math.abs(e[i+1])>>0==+e[i+1]?[]:{},t)[e[e.length-1]]=s,t)}getdata(t){let e=this.getval(t);if(/^@/.test(t)){const[,s,i]=/^@(.*?)\.(.*?)$/.exec(t),r=s?this.getval(s):"";if(r)try{const t=JSON.parse(r);e=t?this.lodash_get(t,i,""):e}catch(t){e=""}}return e}setdata(t,e){let s=!1;if(/^@/.test(e)){const[,i,r]=/^@(.*?)\.(.*?)$/.exec(e),o=this.getval(i),h=i?"null"===o?null:o||"{}":"{}";try{const e=JSON.parse(h);this.lodash_set(e,r,t),s=this.setval(JSON.stringify(e),i)}catch(e){const o={};this.lodash_set(o,r,t),s=this.setval(JSON.stringify(o),i)}}else s=this.setval(t,e);return s}getval(t){return this.isSurge()||this.isLoon()?$persistentStore.read(t):this.isQuanX()?$prefs.valueForKey(t):this.isNode()?(this.data=this.loaddata(),this.data[t]):this.data&&this.data[t]||null}setval(t,e){return this.isSurge()||this.isLoon()?$persistentStore.write(t,e):this.isQuanX()?$prefs.setValueForKey(t,e):this.isNode()?(this.data=this.loaddata(),this.data[e]=t,this.writedata(),!0):this.data&&this.data[e]||null}initGotEnv(t){this.got=this.got?this.got:require("got"),this.cktough=this.cktough?this.cktough:require("tough-cookie"),this.ckjar=this.ckjar?this.ckjar:new this.cktough.CookieJar,t&&(t.headers=t.headers?t.headers:{},void 0===t.headers.Cookie&&void 0===t.cookieJar&&(t.cookieJar=this.ckjar))}get(t,e=(()=>{})){t.headers&&(delete t.headers["Content-Type"],delete t.headers["Content-Length"]),this.isSurge()||this.isLoon()?(this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.get(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)})):this.isQuanX()?(this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t))):this.isNode()&&(this.initGotEnv(t),this.got(t).on("redirect",(t,e)=>{try{if(t.headers["set-cookie"]){const s=t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();this.ckjar.setCookieSync(s,null),e.cookieJar=this.ckjar}}catch(t){this.logErr(t)}}).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)}))}post(t,e=(()=>{})){if(t.body&&t.headers&&!t.headers["Content-Type"]&&(t.headers["Content-Type"]="application/x-www-form-urlencoded"),t.headers&&delete t.headers["Content-Length"],this.isSurge()||this.isLoon())this.isSurge()&&this.isNeedRewrite&&(t.headers=t.headers||{},Object.assign(t.headers,{"X-Surge-Skip-Scripting":!1})),$httpClient.post(t,(t,s,i)=>{!t&&s&&(s.body=i,s.statusCode=s.status),e(t,s,i)});else if(this.isQuanX())t.method="POST",this.isNeedRewrite&&(t.opts=t.opts||{},Object.assign(t.opts,{hints:!1})),$task.fetch(t).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>e(t));else if(this.isNode()){this.initGotEnv(t);const{url:s,...i}=t;this.got.post(s,i).then(t=>{const{statusCode:s,statusCode:i,headers:r,body:o}=t;e(null,{status:s,statusCode:i,headers:r,body:o},o)},t=>{const{message:s,response:i}=t;e(s,i,i&&i.body)})}}time(t){let e={"M+":(new Date).getMonth()+1,"d+":(new Date).getDate(),"H+":(new Date).getHours(),"m+":(new Date).getMinutes(),"s+":(new Date).getSeconds(),"q+":Math.floor(((new Date).getMonth()+3)/3),S:(new Date).getMilliseconds()};/(y+)/.test(t)&&(t=t.replace(RegExp.$1,((new Date).getFullYear()+"").substr(4-RegExp.$1.length)));for(let s in e)new RegExp("("+s+")").test(t)&&(t=t.replace(RegExp.$1,1==RegExp.$1.length?e[s]:("00"+e[s]).substr((""+e[s]).length)));return t}msg(e=t,s="",i="",r){const o=t=>{if(!t)return t;if("string"==typeof t)return this.isLoon()?t:this.isQuanX()?{"open-url":t}:this.isSurge()?{url:t}:void 0;if("object"==typeof t){if(this.isLoon()){let e=t.openUrl||t.url||t["open-url"],s=t.mediaUrl||t["media-url"];return{openUrl:e,mediaUrl:s}}if(this.isQuanX()){let e=t["open-url"]||t.url||t.openUrl,s=t["media-url"]||t.mediaUrl;return{"open-url":e,"media-url":s}}if(this.isSurge()){let e=t.url||t.openUrl||t["open-url"];return{url:e}}}};this.isMute||(this.isSurge()||this.isLoon()?$notification.post(e,s,i,o(r)):this.isQuanX()&&$notify(e,s,i,o(r)));let h=["","==============\ud83d\udce3\u7cfb\u7edf\u901a\u77e5\ud83d\udce3=============="];h.push(e),s&&h.push(s),i&&h.push(i),console.log(h.join("\n")),this.logs=this.logs.concat(h)}log(...t){t.length>0&&(this.logs=[...this.logs,...t]),console.log(t.join(this.logSeparator))}logErr(t,e){const s=!this.isSurge()&&!this.isQuanX()&&!this.isLoon();s?this.log("",`\u2757\ufe0f${this.name}, \u9519\u8bef!`,t.stack):this.log("",`\u2757\ufe0f${this.name}, \u9519\u8bef!`,t)}wait(t){return new Promise(e=>setTimeout(e,t))}done(t={}){const e=(new Date).getTime(),s=(e-this.startTime)/1e3;this.log("",`\ud83d\udd14${this.name}, \u7ed3\u675f! \ud83d\udd5b ${s} \u79d2`),this.log(),(this.isSurge()||this.isQuanX()||this.isLoon())&&$done(t)}}(t,e)}
