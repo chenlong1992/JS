@@ -76,7 +76,7 @@ jobs:
           node Task/Youth_Read.js
         env:
           YOUTH_READ: ${{ secrets.YOUTH_READ6 }}
-          YOUTH_ATIME2: ${{ secrets.YOUTH_ATIME6 }}  
+          YOUTH_ATIME: ${{ secrets.YOUTH_ATIME6 }}  
           
       - name: '运行 【中青看点自动阅读七】'
         if: env.YOUTH_READ7
@@ -84,7 +84,7 @@ jobs:
           node Task/Youth_Read.js
         env:
           YOUTH_READ: ${{ secrets.YOUTH_READ7 }}
-          YOUTH_ATIME2: ${{ secrets.YOUTH_ATIME7 }}
+          YOUTH_ATIME: ${{ secrets.YOUTH_ATIME7 }}
           
       - name: '运行 【中青看点自动阅读八】'
         if: env.YOUTH_READ8
@@ -92,4 +92,4 @@ jobs:
           node Task/Youth_Read.js
         env:
           YOUTH_READ: ${{ secrets.YOUTH_READ8 }}
-          YOUTH_ATIME2: ${{ secrets.YOUTH_ATIME8 }}  
+          YOUTH_ATIME: ${{ secrets.YOUTH_ATIME8 }}  
