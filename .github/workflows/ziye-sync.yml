@@ -14,7 +14,7 @@
 ## 作者名         6Svip120apk69  
 ## 作者库名       gitee_q8qsTAUA_cThxc1RBVUE     
 ## 作者分支名     main     
-## 同步分支名     ZIYE   （可自定义 ）
+## 同步分支名     main   （可自定义 ）
 
 
 
@@ -45,5 +45,5 @@ jobs:
         with:
           source_repo: "https://github.com/6Svip120apk69/gitee_q8qsTAUA_cThxc1RBVUE.git"
           source_branch: "main"
-          destination_branch: "ZIYE"
+          destination_branch: "main"
           github_token: ${{ secrets.PAT }}
